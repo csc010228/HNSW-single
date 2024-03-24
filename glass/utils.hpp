@@ -1,13 +1,10 @@
 #pragma once
 
 #include <algorithm>
-#include <mutex>
 #include <random>
 #include <unordered_set>
 
 namespace glass {
-
-using LockGuard = std::lock_guard<std::mutex>;
 
 inline void GenRandom(std::mt19937 &rng, int *addr, const int size,
                       const int N) {

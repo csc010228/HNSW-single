@@ -6,7 +6,6 @@
 #include <limits>
 #include <random>
 #include <string>
-#include <thread>
 #include <type_traits>
 #include <vector>
 
@@ -71,9 +70,6 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
   void SetEf(int ef) override { this->ef = ef; }
 
   void Optimize(int num_threads = 0) override {
-    if (num_threads == 0) {
-      num_threads = std::thread::hardware_concurrency();
-    }
     std::vector<int> try_pos(std::min(kTryPos, graph.K));
     std::vector<int> try_pls(
         std::min(kTryPls, (int)upper_div(quant.code_size, 64)));
@@ -82,7 +78,6 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
     std::vector<int> dummy_dst(kTryK);
     printf("=============Start optimization=============\n");
     { // warmup
-#pragma omp parallel for schedule(dynamic) num_threads(num_threads)
       for (int i = 0; i < sample_points_num; ++i) {
         Search(optimize_queries.data() + i * d, kTryK, dummy_dst.data());
       }
@@ -95,7 +90,6 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
         this->po = try_po;
         this->pl = try_pl;
         auto st = std::chrono::high_resolution_clock::now();
-#pragma omp parallel for schedule(dynamic) num_threads(num_threads)
         for (int i = 0; i < sample_points_num; ++i) {
           Search(optimize_queries.data() + i * d, kTryK, dummy_dst.data());
         }
@@ -112,7 +106,6 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
     this->po = 1;
     this->pl = 1;
     auto st = std::chrono::high_resolution_clock::now();
-#pragma omp parallel for schedule(dynamic) num_threads(num_threads)
     for (int i = 0; i < sample_points_num; ++i) {
       Search(optimize_queries.data() + i * d, kTryK, dummy_dst.data());
     }

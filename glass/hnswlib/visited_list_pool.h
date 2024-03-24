@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mutex>
 #include <string.h>
 #include <deque>
 
@@ -37,7 +36,6 @@ class VisitedList {
 
 class VisitedListPool {
     std::deque<VisitedList *> pool;
-    std::mutex poolguard;
     int numelements;
 
  public:
@@ -50,7 +48,6 @@ class VisitedListPool {
     VisitedList *getFreeVisitedList() {
         VisitedList *rez;
         {
-            std::unique_lock <std::mutex> lock(poolguard);
             if (pool.size() > 0) {
                 rez = pool.front();
                 pool.pop_front();
@@ -63,7 +60,6 @@ class VisitedListPool {
     }
 
     void releaseVisitedList(VisitedList *vl) {
-        std::unique_lock <std::mutex> lock(poolguard);
         pool.push_front(vl);
     }
 

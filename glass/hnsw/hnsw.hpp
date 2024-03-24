@@ -37,10 +37,9 @@ struct HNSW : public Builder {
     nb = N;
     hnsw = std::make_unique<hnswlib::HierarchicalNSW<float>>(space.get(), N, M,
                                                              efConstruction);
-    std::atomic<int> cnt{0};
+    int cnt = 0;
     auto st = std::chrono::high_resolution_clock::now();
     hnsw->addPoint(data, 0);
-#pragma omp parallel for schedule(dynamic)
     for (int i = 1; i < nb; ++i) {
       hnsw->addPoint(data + i * dim, i);
       int cur = cnt += 1;
@@ -52,7 +51,6 @@ struct HNSW : public Builder {
     auto ela = std::chrono::duration<double>(ed - st).count();
     printf("HNSW building cost: %.2lfs\n", ela);
     final_graph.init(nb, 2 * M);
-#pragma omp parallel for
     for (int i = 0; i < nb; ++i) {
       int *edges = (int *)hnsw->get_linklist0(i);
       for (int j = 1; j <= edges[0]; ++j) {
