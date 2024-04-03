@@ -1,14 +1,14 @@
 #pragma once
 
-#include "glass/common.hpp"
-#include "glass/memory.hpp"
-#include "glass/neighbor.hpp"
-#include "glass/quant/fp32_quant.hpp"
-#include "glass/simd/distance.hpp"
+#include "hnsw/common.hpp"
+#include "hnsw/memory.hpp"
+#include "hnsw/neighbor.hpp"
+#include "hnsw/quant/fp32_quant.hpp"
+#include "hnsw/simd/distance.hpp"
 
 #include <cmath>
 
-namespace glass {
+namespace hnsw {
 
 template <Metric metric, typename Reorderer = FP32Quantizer<metric>,
           int DIM = 0>
@@ -105,4 +105,4 @@ struct SQ4Quantizer {
   }
 };
 
-} // namespace glass
+} // namespace hnsw

@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <immintrin.h>
 
-namespace glass {
+namespace hnsw {
 
 inline float reduce_add_f32x16(__m512 x) {
   auto sumh =
@@ -26,6 +26,6 @@ inline int32_t reduce_add_i32x16(__m512i x) {
   return _mm_extract_epi32(tmp2, 0) + _mm_extract_epi32(tmp2, 1);
 }
 
-} // namespace glass
+} // namespace hnsw
 
 #endif

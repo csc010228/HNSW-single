@@ -1,10 +1,10 @@
 #pragma once
 
-#include "glass/common.hpp"
-#include "glass/memory.hpp"
-#include "glass/simd/distance.hpp"
+#include "hnsw/common.hpp"
+#include "hnsw/memory.hpp"
+#include "hnsw/simd/distance.hpp"
 
-namespace glass {
+namespace hnsw {
 
 template <Metric metric, int DIM = 0> struct FP32Quantizer {
   using data_type = float;
@@ -61,4 +61,4 @@ template <Metric metric, int DIM = 0> struct FP32Quantizer {
   }
 };
 
-} // namespace glass
+} // namespace hnsw

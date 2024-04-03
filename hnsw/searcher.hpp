@@ -9,13 +9,13 @@
 #include <type_traits>
 #include <vector>
 
-#include "glass/common.hpp"
-#include "glass/graph.hpp"
-#include "glass/neighbor.hpp"
-#include "glass/quant/quant.hpp"
-#include "glass/utils.hpp"
+#include "hnsw/common.hpp"
+#include "hnsw/graph.hpp"
+#include "hnsw/neighbor.hpp"
+#include "hnsw/quant/quant.hpp"
+#include "hnsw/utils.hpp"
 
-namespace glass {
+namespace hnsw {
 
 struct SearcherBase {
   virtual void SetData(const float *data, int n, int dim) = 0;
@@ -76,7 +76,7 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
     std::iota(try_pos.begin(), try_pos.end(), 1);
     std::iota(try_pls.begin(), try_pls.end(), 1);
     std::vector<int> dummy_dst(kTryK);
-    printf("=============Start optimization=============\n");
+    fprintf(stderr, "=============Start optimization=============\n");
     { // warmup
       for (int i = 0; i < sample_points_num; ++i) {
         Search(optimize_queries.data() + i * d, kTryK, dummy_dst.data());
@@ -111,7 +111,7 @@ template <typename Quantizer> struct Searcher : public SearcherBase {
     }
     auto ed = std::chrono::high_resolution_clock::now();
     float baseline_ela = std::chrono::duration<double>(ed - st).count();
-    printf("settint best po = %d, best pl = %d\n"
+    fprintf(stderr, "settint best po = %d, best pl = %d\n"
            "gaining %.2f%% performance improvement\n============="
            "Done optimization=============\n",
            best_po, best_pl, 100.0 * (baseline_ela / min_ela - 1));
@@ -167,7 +167,7 @@ inline std::unique_ptr<SearcherBase> create_searcher(const Graph<int> &graph,
     } else if (m == Metric::IP) {
       return std::make_unique<Searcher<FP32Quantizer<Metric::IP>>>(graph);
     } else {
-      printf("Metric not suppported\n");
+      fprintf(stderr, "Metric not suppported\n");
       return nullptr;
     }
   } else if (level == 1) {
@@ -176,7 +176,7 @@ inline std::unique_ptr<SearcherBase> create_searcher(const Graph<int> &graph,
     } else if (m == Metric::IP) {
       return std::make_unique<Searcher<SQ8Quantizer<Metric::IP>>>(graph);
     } else {
-      printf("Metric not suppported\n");
+      fprintf(stderr, "Metric not suppported\n");
       return nullptr;
     }
   } else if (level == 2) {
@@ -185,13 +185,13 @@ inline std::unique_ptr<SearcherBase> create_searcher(const Graph<int> &graph,
     } else if (m == Metric::IP) {
       return std::make_unique<Searcher<SQ4Quantizer<Metric::IP>>>(graph);
     } else {
-      printf("Metric not suppported\n");
+      fprintf(stderr, "Metric not suppported\n");
       return nullptr;
     }
   } else {
-    printf("Quantizer type not supported\n");
+    fprintf(stderr, "Quantizer type not supported\n");
     return nullptr;
   }
 }
 
-} // namespace glass
+} // namespace hnsw

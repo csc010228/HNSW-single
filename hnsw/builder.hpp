@@ -1,8 +1,8 @@
 #pragma once
 
-#include "glass/graph.hpp"
+#include "hnsw/graph.hpp"
 
-namespace glass {
+namespace hnsw {
 
 struct Builder {
   virtual void Build(float *data, int nb) = 0;
@@ -10,4 +10,4 @@ struct Builder {
   virtual ~Builder() = default;
 };
 
-} // namespace glass
+} // namespace hnsw

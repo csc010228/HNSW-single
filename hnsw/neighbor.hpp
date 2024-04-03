@@ -9,9 +9,9 @@
 #include <queue>
 #include <vector>
 
-#include "glass/memory.hpp"
+#include "hnsw/memory.hpp"
 
-namespace glass {
+namespace hnsw {
 
 namespace searcher {
 
@@ -276,4 +276,4 @@ inline int insert_into_pool(Neighbor *addr, int K, Neighbor nn) {
   return right;
 }
 
-} // namespace glass
+} // namespace hnsw

@@ -4,10 +4,10 @@
 #include <fstream>
 #include <vector>
 
-#include "glass/memory.hpp"
-#include "glass/quant/quant.hpp"
+#include "hnsw/memory.hpp"
+#include "hnsw/quant/quant.hpp"
 
-namespace glass {
+namespace hnsw {
 
 struct HNSWInitializer {
   int N, K;
@@ -82,4 +82,4 @@ struct HNSWInitializer {
   }
 };
 
-} // namespace glass
+} // namespace hnsw

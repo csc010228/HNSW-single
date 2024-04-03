@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <sys/mman.h>
 
-namespace glass {
+namespace hnsw {
 
 template <typename T> struct align_alloc {
   T *ptr = nullptr;
@@ -41,4 +41,4 @@ inline void *alloc64B(size_t nbytes) {
   return p;
 }
 
-} // namespace glass
+} // namespace hnsw

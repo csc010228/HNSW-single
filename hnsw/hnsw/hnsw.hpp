@@ -1,17 +1,17 @@
 #pragma once
 
-#include "glass/hnsw/HNSWInitializer.hpp"
-#include "glass/builder.hpp"
-#include "glass/common.hpp"
-#include "glass/graph.hpp"
-#include "glass/hnswlib/hnswlib.h"
-#include "glass/hnswlib/space_ip.h"
-#include "glass/hnswlib/space_l2.h"
-#include "glass/hnswlib/hnswalg.h"
+#include "hnsw/hnsw/HNSWInitializer.hpp"
+#include "hnsw/builder.hpp"
+#include "hnsw/common.hpp"
+#include "hnsw/graph.hpp"
+#include "hnsw/hnswlib/hnswlib.h"
+#include "hnsw/hnswlib/space_ip.h"
+#include "hnsw/hnswlib/space_l2.h"
+#include "hnsw/hnswlib/hnswalg.h"
 #include <chrono>
 #include <memory>
 
-namespace glass {
+namespace hnsw {
 
 struct HNSW : public Builder {
   int nb, dim;
@@ -29,7 +29,7 @@ struct HNSW : public Builder {
     } else if (m == Metric::IP) {
       space = std::make_unique<hnswlib::InnerProductSpace>(dim);
     } else {
-      printf("Unsupported metric type\n");
+      fprintf(stderr, "Unsupported metric type\n");
     }
   }
 
@@ -44,12 +44,12 @@ struct HNSW : public Builder {
       hnsw->addPoint(data + i * dim, i);
       int cur = cnt += 1;
       if (cur % 10000 == 0) {
-        printf("HNSW building progress: [%d/%d]\n", cur, nb);
+        fprintf(stderr, "HNSW building progress: [%d/%d]\n", cur, nb);
       }
     }
     auto ed = std::chrono::high_resolution_clock::now();
     auto ela = std::chrono::duration<double>(ed - st).count();
-    printf("HNSW building cost: %.2lfs\n", ela);
+    fprintf(stderr, "HNSW building cost: %.2lfs\n", ela);
     final_graph.init(nb, 2 * M);
     for (int i = 0; i < nb; ++i) {
       int *edges = (int *)hnsw->get_linklist0(i);
@@ -77,4 +77,4 @@ struct HNSW : public Builder {
 
   Graph<int> GetGraph() override { return final_graph; }
 };
-} // namespace glass
+} // namespace hnsw

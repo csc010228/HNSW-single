@@ -3,11 +3,11 @@
 #include <string>
 #include <unordered_map>
 
-#include "glass/quant/fp32_quant.hpp"
-#include "glass/quant/sq4_quant.hpp"
-#include "glass/quant/sq8_quant.hpp"
+#include "hnsw/quant/fp32_quant.hpp"
+#include "hnsw/quant/sq4_quant.hpp"
+#include "hnsw/quant/sq8_quant.hpp"
 
-namespace glass {
+namespace hnsw {
 
 enum class QuantizerType { FP32, SQ8, SQ4 };
 
@@ -20,4 +20,4 @@ inline int quantizer_map_init = [] {
   return 42;
 }();
 
-} // namespace glass
+} // namespace hnsw

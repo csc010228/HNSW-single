@@ -1,15 +1,15 @@
 #pragma once
 
-#include "glass/common.hpp"
-#include "glass/memory.hpp"
-#include "glass/neighbor.hpp"
-#include "glass/quant/fp32_quant.hpp"
-#include "glass/simd/distance.hpp"
+#include "hnsw/common.hpp"
+#include "hnsw/memory.hpp"
+#include "hnsw/neighbor.hpp"
+#include "hnsw/quant/fp32_quant.hpp"
+#include "hnsw/simd/distance.hpp"
 
 #include <cmath>
 #include <vector>
 
-namespace glass {
+namespace hnsw {
 
 template <Metric metric, int DIM = 0> struct SQ8Quantizer {
   using data_type = uint8_t;
@@ -96,4 +96,4 @@ template <Metric metric, int DIM = 0> struct SQ8Quantizer {
   }
 };
 
-} // namespace glass
+} // namespace hnsw

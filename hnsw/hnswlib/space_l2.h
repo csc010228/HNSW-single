@@ -1,8 +1,30 @@
 #pragma once
 #include "hnswlib.h"
 
+#if defined(__clang__)
+
+#define FAST_BEGIN
+#define FAST_END
+#define GLASS_INLINE __attribute__((always_inline))
+
+#elif defined(__GNUC__)
+
+#define FAST_BEGIN                                                             \
+  _Pragma("GCC push_options") _Pragma(                                         \
+      "GCC optimize (\"unroll-loops,associative-math,no-signed-zeros\")")
+#define FAST_END _Pragma("GCC pop_options")
+#define GLASS_INLINE [[gnu::always_inline]]
+#else
+
+#define FAST_BEGIN
+#define FAST_END
+#define GLASS_INLINE
+
+#endif
+
 namespace hnswlib {
 
+FAST_BEGIN
 static float
 L2Sqr(const void *pVect1v, const void *pVect2v, const void *qty_ptr) {
     float *pVect1 = (float *) pVect1v;
@@ -18,6 +40,7 @@ L2Sqr(const void *pVect1v, const void *pVect2v, const void *qty_ptr) {
     }
     return (res);
 }
+FAST_END
 
 #if defined(USE_AVX512)
 
@@ -206,9 +229,9 @@ L2SqrSIMD4ExtResiduals(const void *pVect1v, const void *pVect2v, const void *qty
 #endif
 
 class L2Space : public SpaceInterface<float> {
-    DISTFUNC<float> fstdistfunc_;
-    size_t data_size_;
-    size_t dim_;
+    DISTFUNC<float> fstdistfunc_;                       // 距离计算函数
+    size_t data_size_;                                  // 单条数据的byte大小
+    size_t dim_;                                        // 数据维度
 
  public:
     L2Space(size_t dim) {
@@ -237,14 +260,17 @@ class L2Space : public SpaceInterface<float> {
         data_size_ = dim * sizeof(float);
     }
 
+    // 获取单条数据的byte大小
     size_t get_data_size() {
         return data_size_;
     }
 
+    // 获取距离计算函数
     DISTFUNC<float> get_dist_func() {
         return fstdistfunc_;
     }
 
+    // 获取数据维度
     void *get_dist_func_param() {
         return &dim_;
     }

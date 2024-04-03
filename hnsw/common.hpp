@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace glass {
+namespace hnsw {
 
 enum class Metric {
   L2,
@@ -47,4 +47,4 @@ inline constexpr int64_t do_align(int64_t x, int64_t align) {
 
 #endif
 
-} // namespace glass
+} // namespace hnsw

@@ -6,10 +6,10 @@
 #include <memory>
 #include <vector>
 
-#include "glass/hnsw/HNSWInitializer.hpp"
-#include "glass/memory.hpp"
+#include "hnsw/hnsw/HNSWInitializer.hpp"
+#include "hnsw/memory.hpp"
 
-namespace glass {
+namespace hnsw {
 
 constexpr int EMPTY_ID = -1;
 
@@ -85,7 +85,7 @@ template <typename node_t> struct Graph {
     if (initializer) {
       initializer->save(writer);
     }
-    printf("Graph Saving done\n");
+    fprintf(stderr, "Graph Saving done\n");
   }
 
   void load(const std::string &filename) {
@@ -104,8 +104,8 @@ template <typename node_t> struct Graph {
       initializer = std::make_unique<HNSWInitializer>(N);
       initializer->load(reader);
     }
-    printf("Graph Loding done\n");
+    fprintf(stderr, "Graph Loding done\n");
   }
 };
 
-} // namespace glass
+} // namespace hnsw

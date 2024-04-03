@@ -4,7 +4,7 @@
 #include <random>
 #include <unordered_set>
 
-namespace glass {
+namespace hnsw {
 
 inline void GenRandom(std::mt19937 &rng, int *addr, const int size,
                       const int N) {
@@ -45,4 +45,4 @@ struct RandomGenerator {
   double rand_double() { return mt() / double(mt.max()); }
 };
 
-} // namespace glass
+} // namespace hnsw
